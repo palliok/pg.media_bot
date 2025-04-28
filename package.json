@@ -9,7 +9,8 @@
     "start:dev": "nodemon",
     "start:prod": "node dist/index.js",
     "start:docker": "node index.js",
-    "docker": "npm run build && docker buildx build --platform linux/amd64 --tag 1442/pg.media_bot:v0.44 ."
+    "docker-amd": "npm run build && docker buildx build --platform linux/amd64 --tag 1442/pg.media_bot:v0.48 .",
+    "docker-arm": "npm run build && docker build --tag 1442/pg.media_bot:v0.47 ."
   },
   "author": {
     "name": "palliok",
@@ -28,10 +29,10 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
-    "@distube/ytdl-core": "^4.15.1",
-    "axios": "^1.7.7",
-    "canvas": "^2.11.2",
-    "dotenv": "^16.4.5",
+    "@distube/ytdl-core": "^4.16.8",
+    "axios": "^1.9.0",
+    "canvas": "^3.1.0",
+    "dotenv": "^16.5.0",
     "ffmpeg": "^0.0.4",
     "ffmpeg-static": "^5.2.0",
     "fluent-ffmpeg": "^2.1.2",

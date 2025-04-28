@@ -14,7 +14,7 @@ import { Timestamp, Video } from '@models/video';
 import { retryPromiseMethod } from 'utils';
 import { IContextBot } from '@models/context.interface';
 import { addMsgToRemoveList, removeTempMessages } from 'utils/processMessages';
-ffmpeg.setFfmpegPath(ffmpegPath.path)
+ffmpeg.setFfmpegPath('/usr/bin/ffmpeg')
 
 const _dirname = path.resolve();
 const _tempDir = path.resolve(_dirname, 'temp/');
@@ -168,7 +168,7 @@ export function downloadAndUploadVideo(url: string | undefined, timestamps: Time
                         first(),
                         tap(() => {
                             removeTempMessages(ctx);
-                            ctx.sendMessage('⏳').then(msg => addMsgToRemoveList(msg.message_id, ctx));
+                            ctx.sendMessage('🎬').then(msg => addMsgToRemoveList(msg.message_id, ctx));
                         }),
                         switchMap(([video, audio]) => from(_mergeVideoAndAudio(video, audio, mergeVideoOutput))),
                         map(() => videoInfo)
@@ -464,7 +464,7 @@ function _getVideoTimestamps(videoInfo: ytdl.videoInfo): Timestamp[] {
                 start: duration,
                 end: 0,
                 title: title,
-                description: moment(videoInfo.videoDetails.uploadDate).format('D MMMM YYYY')
+                description: moment(videoInfo.videoDetails.uploadDate).utc().format('D MMMM YYYY')
             }
 
             timestamps.push(timestamp);
