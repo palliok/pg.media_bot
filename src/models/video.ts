@@ -16,6 +16,7 @@ export interface Video {
     date: Moment;
     timestamps: Timestamp[],
     picture?: Picture;
+    isLive?: boolean | undefined;
 }
 
 export interface Picture {

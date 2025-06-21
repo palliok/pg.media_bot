@@ -2,6 +2,8 @@ import { IContextBot } from "@models/context.interface";
 import { createLivePicture } from "@services/youtube.service";
 import { BaseScene } from "telegraf/scenes";
 import { addMsgToRemoveList, removeTempMessages } from "utils/processMessages";
+import fs from 'fs';
+import { Input } from "telegraf";
 
 const scene = new BaseScene<IContextBot>('youtube.picture.live');
 
@@ -14,9 +16,15 @@ scene.enter(async (ctx) => {
         return;
     }
 
-    await createLivePicture(ctx.session.video?.id!);
-    await ctx.sendMessage('🟢 Картинка: ' + ctx.session.video?.title);
-    await ctx.scene.enter('start');
+    const picture = await createLivePicture(ctx.session.video?.id!);
+    await ctx.sendMessage('Картинка «' + ctx.session.video?.title + '» загружена на YouTube. \n❗️ Не забудь загрузить в ВК');
+    ctx.sendDocument(Input.fromLocalFile(picture)).then(() => {
+        if (fs.existsSync(picture)) {
+            fs.unlinkSync(picture);
+        }
+        ctx.scene.enter('start');
+        return;
+    });
 });
 
 

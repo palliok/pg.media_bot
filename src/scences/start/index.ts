@@ -9,7 +9,11 @@ start.enter(async (ctx) => {
     addMsgToRemoveList(ctx.message?.message_id, ctx);
     removeTempMessages(ctx);
 
-    ctx.session.customText = undefined;
+    if (ctx.session.customText != undefined && ctx.text == ctx.session.customText) {
+        return;
+    }
+
+    ctx.session.customText = ctx.session.customText;
     ctx.session.timestamps = undefined;
     ctx.session.video = undefined;
 
@@ -39,6 +43,8 @@ start.enter(async (ctx) => {
 
 start.on('message', async (ctx) => {
     addMsgToRemoveList(ctx.message?.message_id, ctx);
+
+    ctx.session.customText = ctx.text;
 
     try {
         const res = await isYouTubeVideo(ctx.text);

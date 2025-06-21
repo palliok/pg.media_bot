@@ -14,7 +14,7 @@ import { Timestamp, Video } from '@models/video';
 import { retryPromiseMethod } from 'utils';
 import { IContextBot } from '@models/context.interface';
 import { addMsgToRemoveList, removeTempMessages } from 'utils/processMessages';
-ffmpeg.setFfmpegPath('/usr/bin/ffmpeg')
+ffmpeg.setFfmpegPath(ffmpegPath.path)
 
 const _dirname = path.resolve();
 const _tempDir = path.resolve(_dirname, 'temp/');
@@ -52,7 +52,7 @@ export async function getVideo(link: string) {
     return _mapVideo(videoInfo);
 }
 
-export async function createLivePicture(id: string): Promise<boolean> {
+export async function createLivePicture(id: string): Promise<string> {
     try {
         const videoInfo = await ytdl.getInfo(id);
         const title = videoInfo.videoDetails.title.split('|')[0].trim();
@@ -60,11 +60,10 @@ export async function createLivePicture(id: string): Promise<boolean> {
 
         const picture = await drawLivePicture(title, date);
         await uploadThumbnail(id, picture);
-        fs.unlinkSync(picture);
-        return true;
+        return picture;
     } catch (error) {
         console.log(error);
-        return false;
+        return '';
     }
 }
 
@@ -204,7 +203,8 @@ function _mapVideo(videoInfo: ytdl.videoInfo): Video {
         title: videoInfo.videoDetails.title,
         description: videoInfo.videoDetails.description,
         date: moment(videoInfo.videoDetails.uploadDate),
-        timestamps: _getVideoTimestamps(videoInfo)
+        timestamps: _getVideoTimestamps(videoInfo),
+        isLive: videoInfo.videoDetails.isLive || videoInfo.videoDetails.isLiveContent
     };
     return video;
 }
@@ -325,7 +325,8 @@ function _mergeVideoAndAudio(video: any, audio: any, output: string) {
             resolve(true);
         });
 
-        command.on('error', () => {
+        command.on('error', (error) => {
+            console.log(error);
             resolve(false);
         })
 
@@ -365,7 +366,8 @@ function _cutTimestamp(id: string, timestamp: Timestamp): Promise<Timestamp | un
             resolve(timestamp);
         });
 
-        command.on('error', () => {
+        command.on('error', (error) => {
+            console.log(error);
             resolve(undefined);
         })
 

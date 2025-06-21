@@ -14,7 +14,9 @@ scene.enter(async (ctx) => {
 
     if (ctx.session.video.timestamps?.length > 0) {
         keyboard.push(['вырезать отрывок']);
-    } else {
+    }
+
+    if (!ctx.session.video.isLive) {
         keyboard.push(['скачать аудио']);
     }
 
