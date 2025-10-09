@@ -25,9 +25,7 @@ bot.catch((err, ctx) => {
     ctx.sendMessage('🤡');
 });
 
-bot.start(ctx => {
-    ctx.scene.enter('start');
-});
+bot.start(ctx => ctx.scene.enter('start'));
 
 bot.on('message', async (ctx) => {
     if (ctx.scene.current?.id == undefined) {

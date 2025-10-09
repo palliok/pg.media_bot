@@ -27,6 +27,21 @@ scene.enter(async (ctx) => {
     removeTempMessages(ctx);
 
     const title = ctx.session.video?.title;
+    if (title?.includes('Иона') || title?.includes('Ионы')) {
+    
+        ctx.session.video!.picture!.imagePath = path.resolve('src/assets/img/jonah.jpg');
+        ctx.session.video!.picture!.transparent = 300;
+
+        const newPic = await drawPicture(ctx.session?.video?.picture!) as string;
+        await uploadThumbnail(ctx.session?.video?.id!, newPic);
+        await ctx.sendMessage('🟢 Картинка: ' + ctx.session.video?.title);
+    
+        fs.unlinkSync(newPic);
+    
+        ctx.scene.enter('start');
+        return;
+    }
+
     if (title?.includes('Луки')) {
     
         ctx.session.video!.picture!.imagePath = path.resolve('src/assets/img/luke.jpg');

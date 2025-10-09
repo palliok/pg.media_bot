@@ -21,7 +21,7 @@ scene.enter(async (ctx) => {
         return;
     }
 
-    if (title.includes('луки') || title.includes('деяния')) {
+    if (title.includes('луки') || title.includes('деяния') || title.includes('иона')) {
         await ctx.scene.enter('youtube.picture.sermon');
         return;
     }

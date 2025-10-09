@@ -4,3 +4,5 @@ dist/
 temp/
 
 .env
+.env.prod
+.end.dev

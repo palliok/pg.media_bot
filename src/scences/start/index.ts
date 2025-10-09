@@ -9,11 +9,6 @@ start.enter(async (ctx) => {
     addMsgToRemoveList(ctx.message?.message_id, ctx);
     removeTempMessages(ctx);
 
-    if (ctx.session.customText != undefined && ctx.text == ctx.session.customText) {
-        return;
-    }
-
-    ctx.session.customText = ctx.session.customText;
     ctx.session.timestamps = undefined;
     ctx.session.video = undefined;
 
@@ -28,6 +23,10 @@ start.enter(async (ctx) => {
     await ctx.telegram.setMyCommands([{
         command: 'start',
         description: '💾 старт'
+    },
+    {
+        command: 'links',
+        description: '🔗 ссылки'
     }]);
 
     try {
@@ -41,10 +40,10 @@ start.enter(async (ctx) => {
     }
 });
 
+start.command('links', ctx => ctx.scene.enter('links'));
+
 start.on('message', async (ctx) => {
     addMsgToRemoveList(ctx.message?.message_id, ctx);
-
-    ctx.session.customText = ctx.text;
 
     try {
         const res = await isYouTubeVideo(ctx.text);

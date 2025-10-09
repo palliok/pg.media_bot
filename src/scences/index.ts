@@ -5,9 +5,11 @@ import youtubePicture from "./youtube/youtube.picture";
 import youtubePictureSermon from "./youtube/youtube.picture.sermon";
 import youtubePictureLive from "./youtube/youtube.picture.live";
 import youtubeAudio from "./youtube/youtube.audio";
+import links from "./links/links";
 
 const stage = new Stage([
     startScene,
+    links,
     youtube,
     youtubePicture,
     youtubePictureSermon,

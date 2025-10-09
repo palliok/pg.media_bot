@@ -9,7 +9,6 @@ export interface UserSession extends User {
 interface SceneSession extends Scenes.SceneSession {
 	usersList: UserSession[] | undefined;
 	video: Video | undefined;
-	customText: string | undefined;
 	timestamps: Timestamp[] | undefined;
 }
 

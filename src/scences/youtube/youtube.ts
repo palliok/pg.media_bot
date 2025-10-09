@@ -20,12 +20,14 @@ scene.enter(async (ctx) => {
         keyboard.push(['скачать аудио']);
     }
 
-    if (keyboard.length > 0) {
-        keyboard.push(['сделать картинку']);
-    } else {
-        await ctx.scene.enter('youtube.picture');
-        return;
-    }
+    keyboard.push(['сделать картинку']);
+
+    // if (keyboard.length > 0) {
+    //     keyboard.push(['сделать картинку']);
+    // } else {
+    //     await ctx.scene.enter('youtube.picture');
+    //     return;
+    // }
 
     const msg = await ctx.reply('что делаем?', {
         reply_markup: {

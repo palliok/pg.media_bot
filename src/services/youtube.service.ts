@@ -18,7 +18,8 @@ ffmpeg.setFfmpegPath(ffmpegPath.path)
 
 const _dirname = path.resolve();
 const _tempDir = path.resolve(_dirname, 'temp/');
-const _assetsDir = path.resolve(_dirname, 'src/assets/')
+const _assetsDir = path.resolve(_dirname, 'src/assets/');
+const _channelId = 'UCRMp-feWqFhOTpYpn8soqXQ';
 
 export async function isYouTubeVideo(link: string | undefined) {
     if (link == undefined) {
@@ -31,7 +32,7 @@ export async function isYouTubeVideo(link: string | undefined) {
 
     const videoInfo = await ytdl.getBasicInfo(link);
 
-    if (videoInfo.videoDetails.channelId != 'UCRMp-feWqFhOTpYpn8soqXQ') {
+    if (videoInfo.videoDetails.channelId != _channelId) {
         return false;
     }
 
@@ -83,6 +84,30 @@ export const getYoutubeVideoId = (link: string | undefined | null) => {
     const match = text.match(youtubeRegExp);
 
     return match ? match[1] : undefined;
+}
+
+export async function getYouTubeLiveLink(): Promise<string | undefined> {
+    const auth = GoogleService.getOauth2();
+
+    const youtube = google.youtube({
+        version: 'v3',
+        auth: auth
+    });
+
+    const searchParams = {
+        part: ['id', 'snippet'],
+        channelId: _channelId,
+        eventType: 'live',
+        type: ['video']
+    };
+
+    const searchResponse = await youtube.search.list(searchParams);
+
+    if (!searchResponse.data.items || searchResponse.data.items.length === 0) {
+        return undefined;
+    }
+
+    return `https://youtube.com/live/${searchResponse.data.items[0].id?.videoId}`;
 }
 
 export const getTimestamps = async (id: string | undefined): Promise<Timestamp[]> => {
